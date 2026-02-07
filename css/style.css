@@ -270,3 +270,40 @@ h1{
   border: 1px solid rgba(255,255,255,.12);
   box-shadow: 0 8px 24px rgba(0,0,0,.35);
 }
+
+
+/* --- Interactive buttons / links --- */
+a.btn,
+a.mini {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover glow */
+a.btn:hover,
+a.mini:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(124,58,237,0.7);
+  box-shadow: 0 0 0 1px rgba(124,58,237,.4),
+              0 8px 24px rgba(124,58,237,.25);
+  transform: translateY(-1px);
+}
+
+/* Active click feedback */
+a.btn:active,
+a.mini:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Add subtle arrow to main buttons */
+a.btn::after {
+  content: " →";
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+a.btn:hover::after {
+  opacity: .7;
+}
