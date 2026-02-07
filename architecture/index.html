@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tradu — Architecture</title>
+  <meta name="description" content="Architecture overview of Tradu: distributed NLP processing with fault tolerance and observability." />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body class="show-en">
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">
+        <span class="dot"></span>
+        <a href="../">Leonardo Martinelli</a>
+      </div>
+
+      <div class="navRight">
+        <span class="pill">Tradu • Architecture</span>
+        <div class="lang" role="tablist" aria-label="Language">
+          <button id="btnES" type="button">ES</button>
+          <button id="btnEN" type="button">EN</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="heroInner">
+        <div class="kicker">
+          <span class="badge">State machine</span>
+          <span class="badge">Watchdogs</span>
+          <span class="badge">Retries</span>
+          <span class="badge">Observability</span>
+        </div>
+
+        <h1>
+          <span data-lang="es">Arquitectura de Tradu</span>
+          <span data-lang="en">Tradu Architecture</span>
+        </h1>
+
+        <p class="subtitle">
+          <span data-lang="es">
+            Vista técnica de alto nivel: componentes, flujo de procesamiento, tolerancia a fallas y observabilidad.
+          </span>
+          <span data-lang="en">
+            High-level technical view: components, processing flow, fault tolerance, and observability.
+          </span>
+        </p>
+
+        <div class="ctaRow">
+          <a class="btn" href="../">
+            <span data-lang="es">Volver</span>
+            <span data-lang="en">Back</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHeader">
+        <h2>
+          <span data-lang="es">Flujo de procesamiento</span>
+          <span data-lang="en">Processing flow</span>
+        </h2>
+      </div>
+
+      <div class="proj">
+        <div class="projCard">
+          <p class="muted">
+            <span data-lang="es">Entrada → Ingesta → Cola → Rotator → Workers → Engine → Persistencia</span>
+            <span data-lang="en">Input → Ingestion → Queue → Rotator → Workers → Engine → Persistence</span>
+          </p>
+          <pre class="muted2" style="white-space:pre-wrap; margin:0;">
+CSV / Requests
+   ↓
+Backend API
+   ↓
+Queue (Redis / FIFO)
+   ↓
+Rotator (load distribution)
+   ↓
+Workers (parallel execution)
+   ↓
+Translation Engine
+   ↓
+Storage + Audit logs
+          </pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHeader">
+        <h2>
+          <span data-lang="es">Fiabilidad</span>
+          <span data-lang="en">Reliability</span>
+        </h2>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>
+            <span data-lang="es">Máquina de estados</span>
+            <span data-lang="en">State machine</span>
+          </h3>
+          <p class="muted">
+            <span data-lang="es">Estados explícitos por bloque: PENDIENTE → CLAIMED → ENCOLADO → EN_PROCESO → COMPLETO/ERROR/CANCELADO</span>
+            <span data-lang="en">Explicit block states: PENDING → CLAIMED → QUEUED → PROCESSING → DONE/ERROR/CANCELED</span>
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>
+            <span data-lang="es">Watchdogs + TTL</span>
+            <span data-lang="en">Watchdogs + TTL</span>
+          </h3>
+          <p class="muted">
+            <span data-lang="es">Heartbeats y TTL detectan “zombies”, re-encolan bloques y evitan procesos colgados.</span>
+            <span data-lang="en">Heartbeats and TTL detect “zombies”, re-queue blocks, and prevent stuck executions.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHeader">
+        <h2>
+          <span data-lang="es">Observabilidad</span>
+          <span data-lang="en">Observability</span>
+        </h2>
+      </div>
+
+      <div class="proj">
+        <div class="projCard">
+          <ul class="list">
+            <li>
+              <span data-lang="es"><strong>Logs estructurados</strong> (JSON) con correlation IDs.</span>
+              <span data-lang="en"><strong>Structured logs</strong> (JSON) with correlation IDs.</span>
+            </li>
+            <li>
+              <span data-lang="es"><strong>Métricas</strong> (Prometheus) para latencia, errores, throughput.</span>
+              <span data-lang="en"><strong>Metrics</strong> (Prometheus) for latency, errors, throughput.</span>
+            </li>
+            <li>
+              <span data-lang="es"><strong>Dashboards</strong> (Grafana) y trazabilidad por data_id/bloque.</span>
+              <span data-lang="en"><strong>Dashboards</strong> (Grafana) and traceability by data_id/block.</span>
+            </li>
+          </ul>
+
+          <p class="muted2" style="margin-top:12px;">
+            <span data-lang="es">Tip: podés agregar capturas en /img y linkearlas acá.</span>
+            <span data-lang="en">Tip: add screenshots in /img and link them here.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <span>© <span id="year"></span> Leonardo Martinelli</span>
+      <span class="muted2">Architecture page</span>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
